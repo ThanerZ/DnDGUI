@@ -193,7 +193,7 @@ public class EnemyMapping extends JPanel {
 	public void drawClearButton(Graphics g)
 	{
 		g.setColor(Color.RED);
-		g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/8, ((mapWidth/gridWidth)*10)-1, (mapHeight/gridHeight)-1);
+		g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/8, ((mapWidth/gridWidth)*10)-1, ((mapHeight/gridHeight)*2)-1);
 	}
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Creation
@@ -210,8 +210,11 @@ public class EnemyMapping extends JPanel {
 
 	public void deletePreviousEnemy()
 	{
-		Horde.remove(hordeLength-1);
-		hordeLength--;
+		if(hordeLength>0)
+		{
+			Horde.remove(hordeLength-1);
+			hordeLength--;
+		}
 	}
 	
 	public void startOver()
