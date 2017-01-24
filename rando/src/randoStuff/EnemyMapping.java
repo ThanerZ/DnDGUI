@@ -35,6 +35,10 @@ public class EnemyMapping extends JPanel {
 	static boolean lClickD = false, rClickD = false, mClickD = false;
 	static int clicks = 0;
 	
+	
+	//Clicking
+	boolean clearEnemiesSafety = true;
+	
 	//Startup
 	boolean startupChecker = true;
 	
@@ -194,7 +198,9 @@ public class EnemyMapping extends JPanel {
 	{
 		g.setColor(Color.RED);
 		g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/8, ((mapWidth/gridWidth)*10)-1, ((mapHeight/gridHeight)*2)-1);
+
 	}
+	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Creation
 	
@@ -217,9 +223,16 @@ public class EnemyMapping extends JPanel {
 		}
 	}
 	
-	public void startOver()
+	public void clearEnemies()
 	{
-		Horde.clear();
+		if(clearEnemiesSafety)
+			clearEnemiesSafety = false;
+		else
+		{
+			Horde.clear();
+			clearEnemiesSafety = true;
+			hordeLength = 0;
+		}
 	}
 	
 
@@ -243,8 +256,6 @@ public class EnemyMapping extends JPanel {
 			}
 	}
 	
-
-
 
 
 
@@ -347,8 +358,12 @@ public class EnemyMapping extends JPanel {
 			int y = event.getY() - 32;
 			
 			if (event.getButton() == MouseEvent.BUTTON1) {
+				//if the click is in the map(grid)
 				if(x<mapWidth && y<mapHeight)
 					createEnemy(x/(mapWidth/gridWidth), y/(mapHeight/gridHeight));
+				//if the click is on the button
+				if(x>(mapWidth + (width-mapWidth)/8) && y>(mapHeight/8) && x<(mapWidth + (width-mapWidth)/8 + (mapWidth/gridWidth)*10)-1 && y<(((mapHeight/8)+(mapHeight/gridHeight)*2)-1))
+					clearEnemies();
 			}
 			if (event.getButton() == MouseEvent.BUTTON3) {
 				
