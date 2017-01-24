@@ -1,0 +1,7 @@
+Name
+X-Position
+Y-Position
+Color (Red amount)
+Color (Green amount)
+Color (Blue amount)
+(MUST LEAVE BLANK LINE AT THE END)

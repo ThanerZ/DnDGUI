@@ -1,0 +1,10 @@
+gridWidth
+gridHeight
+Name
+x position (of obstacle)
+y position (of obstacle)
+width (of obstacle)
+height (of obstacle)
+Color (red)
+Color (greed)
+Color (blue)

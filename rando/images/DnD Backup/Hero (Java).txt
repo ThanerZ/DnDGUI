@@ -1,0 +1,67 @@
+package mainPKG;
+
+import java.awt.Color;
+
+public class Hero {
+	
+
+	int xPos, yPos;
+	int health;
+	int red, green, blue;
+	String name;
+	
+	public Hero()
+	{
+		xPos = 0;
+		yPos = 0;
+		name = "Player";
+	}
+	
+	public Hero(int x, int y)
+	{
+		xPos = x;
+		yPos = y;
+
+	}
+	
+	public Hero(String n, int x, int y)
+	{
+		xPos = x;
+		yPos = y;
+		name = n;
+	}
+	//ULTIMATE ONE
+	public Hero(String n, int x, int y, int r, int g, int b)
+	{
+		xPos = x;
+		yPos = y;
+		name = n;
+		
+		red = r;
+		green = g;
+		blue = b;
+	}
+	
+	public void setPosition(int x, int y)
+	{
+		xPos = x;
+		yPos = y;
+	}
+	
+	
+	public int getXPos()
+	{
+		return xPos;
+	}
+	
+	public int getYPos()
+	{
+		return yPos;
+	}
+	
+	public Color getColor()
+	{
+		return new Color(red, green, blue);
+	}
+	
+}
