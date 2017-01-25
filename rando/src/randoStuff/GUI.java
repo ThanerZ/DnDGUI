@@ -103,11 +103,11 @@ public class GUI extends JPanel {
 			drawBackground(g);
 			drawMap(g);
 			drawGrid(g);
-			drawOrderPriority(g);
-			drawPartyOrderBar(g);
+			drawPriorityBar(g);
+			drawPartyBar(g);
 			//drawMotionArrow(g);
 			drawParty(g);
-			drawPartyPriority(g);
+			drawPriority(g);
 			drawHorde(g);
 			
 			//sanity line
@@ -162,7 +162,6 @@ public class GUI extends JPanel {
 			g.drawLine(0, (i+1)*(mapHeight/gridHeight), mapWidth, (i+1)*(mapHeight/gridHeight));
 		}
 	}
-	
 	public void drawMap(Graphics g)
 	{
 		int xSpot = 0;
@@ -196,51 +195,6 @@ public class GUI extends JPanel {
 		}
 		
 	}
-	
-	public void drawPartyPriority(Graphics g)
-	{
-		g.setColor(Color.YELLOW);
-		int xSpot = 0;
-		int ySpot = 0;
-		xSpot = ((Hero) party.get(partySelection)).getXPos();
-		ySpot = ((Hero) party.get(partySelection)).getYPos();
-		g.drawRect(xSpot*(mapWidth/gridWidth), ySpot*(mapHeight/gridHeight), (mapWidth/gridWidth), (mapHeight/gridHeight));
-		g.setColor(new Color(255, 255, 0));
-		
-	}
-	
-	public void drawMotionArrow(Graphics g)
-	{
-		g.setColor(Color.YELLOW);
-		
-		int heroXSpot = 0;
-		int heroYSpot = 0;
-		heroXSpot = ((Hero) party.get(partySelection)).getXPos();
-		heroYSpot = ((Hero) party.get(partySelection)).getYPos();
-		g.drawLine(heroXSpot, heroYSpot, cursorXPos, cursorYPos);
-
-	}
-	
-	public void drawPartyOrderBar(Graphics g)
-	{
-		for(int i=0; i<partyLength; i++)
-		{
-			g.setColor(((Hero) party.get(i)).getColor());
-			g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/(partyLength+1)*(i+1), (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
-			g.setColor(Color.BLACK);
-			g.drawString((party.get(i).getName()), (mapWidth + (width-mapWidth)/8) + (mapWidth/gridWidth*2), mapHeight/(partyLength+1)*(i+1) + (mapHeight/gridHeight/2));
-			
-		}
-		
-		
-	}
-	
-	public void drawOrderPriority(Graphics g)
-	{
-		g.setColor(Color.YELLOW);
-		g.fillRect(mapWidth, mapHeight/(partyLength+1)*(partySelection+1) - ((mapHeight/gridHeight)/8), width-mapWidth, (mapHeight/gridHeight)-1 + ((mapHeight/gridHeight)/4));
-	}
-	
 	public void drawHorde(Graphics g)
 	{
 		
@@ -256,6 +210,62 @@ public class GUI extends JPanel {
 			
 		
 	}
+	
+	
+	
+	
+	public void drawPartyBar(Graphics g)
+	{
+		for(int i=0; i<partyLength; i++)
+		{
+			
+			g.setColor(((Hero) party.get(i)).getColor());
+			g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/(partyLength+1)*(i+1), (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
+			g.setColor(Color.BLACK);
+			g.drawString((party.get(i).getName()), (mapWidth + (width-mapWidth)/8) + (mapWidth/gridWidth*2), mapHeight/(partyLength+1)*(i+1) + (mapHeight/gridHeight/2));
+			
+		}
+		
+		
+	}
+	public void drawHordeBar(Graphics g)
+	{
+		for(int i=0; i<hordeLength; i++)
+		{
+			g.setColor(((Enemy) horde.get(i)).getColor());
+			g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/(hordeLength+1)*(i+1), (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
+			
+		}
+	}
+	
+	public void drawPriority(Graphics g)
+	{
+		g.setColor(Color.YELLOW);
+		int xSpot = 0;
+		int ySpot = 0;
+		
+		if(toggleHeroControl)
+		{
+			xSpot = ((Hero) party.get(partySelection)).getXPos();
+			ySpot = ((Hero) party.get(partySelection)).getYPos();
+			g.drawRect(xSpot*(mapWidth/gridWidth), ySpot*(mapHeight/gridHeight), (mapWidth/gridWidth), (mapHeight/gridHeight));
+		}
+		else
+		{
+			xSpot = ((Enemy) horde.get(hordeSelection)).getXPos();
+			ySpot = ((Enemy) horde.get(hordeSelection)).getYPos();
+			g.drawRect(xSpot*(mapWidth/gridWidth), ySpot*(mapHeight/gridHeight), (mapWidth/gridWidth), (mapHeight/gridHeight));
+		}
+		
+		
+	}
+	public void drawPriorityBar(Graphics g)
+	{
+		g.setColor(Color.YELLOW);
+		g.fillRect(mapWidth, mapHeight/(partyLength+1)*(partySelection+1) - ((mapHeight/gridHeight)/8), width-mapWidth, (mapHeight/gridHeight)-1 + ((mapHeight/gridHeight)/4));
+	}
+	
+	
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Reading in Party/Map and communicating with Handler class
