@@ -199,7 +199,10 @@ public class EnemyMapping extends JPanel {
 	
 	public void drawClearButton(Graphics g)
 	{
-		g.setColor(Color.RED);
+		if(clearEnemiesSafety)
+			g.setColor(new Color(255, 75, 75));
+		else
+			g.setColor(Color.RED);
 		g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/8, ((mapWidth/gridWidth)*10)-1, ((mapHeight/gridHeight)*2)-1);
 
 	}
@@ -215,11 +218,14 @@ public class EnemyMapping extends JPanel {
 	
 	public void createEnemy(int x, int y)
 	{
+		if(checkMapOccupation(x, y))
+		{
 		Enemy Eminem = new Enemy();
 		Eminem.setPosition(x, y);
 		Eminem.setColor(255,0,0);
 		Horde.add(Eminem);
 		hordeLength++;
+		}
 		
 	}
 
@@ -263,6 +269,7 @@ public class EnemyMapping extends JPanel {
 		writer.close();
 		
 		System.out.println("SAVED");
+		System.exit(0);
 	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -285,7 +292,18 @@ public class EnemyMapping extends JPanel {
 			}
 	}
 	
-
+	public boolean checkMapOccupation(int x, int y)
+	{
+		//returns false for a grid-space being occupied
+		//occupied = false
+		
+		for(int i = 0; i<hordeLength; i++)
+		{
+			if(x == ((Enemy) Horde.get(i)).getXPos()  &&  y == ((Enemy) Horde.get(i)).getYPos())
+				return false;
+		}
+		return true;
+	}
 
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
