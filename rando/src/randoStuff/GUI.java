@@ -45,6 +45,9 @@ public class GUI extends JPanel {
 	//Sanity
 	int tracker = 0;
 	
+	//Clicking Variables
+	boolean toggleHeroControl = true;
+	
 	
 	//Map
 	//makes it 80% of JFrame
@@ -65,6 +68,7 @@ public class GUI extends JPanel {
 	int partySelection = 0;
 	ArrayList<Enemy> horde = new ArrayList<Enemy>();
 	int hordeLength = 0;
+	int hordeSelection = 0;
 	ArrayList<Obstacle> course = new ArrayList<Obstacle>();
 	int courseLength = 0;
 	ArrayList<String> names = new ArrayList<String>();
@@ -100,12 +104,11 @@ public class GUI extends JPanel {
 			drawMap(g);
 			drawGrid(g);
 			drawOrderPriority(g);
-			drawOrderBar(g);
+			drawPartyOrderBar(g);
 			//drawMotionArrow(g);
 			drawParty(g);
 			drawPartyPriority(g);
 			drawHorde(g);
-			
 			
 			//sanity line
 			g2d.setColor(this.randColor());
@@ -218,12 +221,14 @@ public class GUI extends JPanel {
 
 	}
 	
-	public void drawOrderBar(Graphics g)
+	public void drawPartyOrderBar(Graphics g)
 	{
 		for(int i=0; i<partyLength; i++)
 		{
 			g.setColor(((Hero) party.get(i)).getColor());
 			g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/(partyLength+1)*(i+1), (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
+			g.setColor(Color.BLACK);
+			g.drawString((party.get(i).getName()), (mapWidth + (width-mapWidth)/8) + (mapWidth/gridWidth*2), mapHeight/(partyLength+1)*(i+1) + (mapHeight/gridHeight/2));
 			
 		}
 		
@@ -251,16 +256,7 @@ public class GUI extends JPanel {
 			
 		
 	}
-	/*public void winner(Graphics g)
-	{
-		String output ="Blueberry Did It!";
-		g.setColor(Color.YELLOW);
-		g.clearRect(0, 0, mapWidth, mapHeight);
-		g.fillRect(0, 0, mapWidth, mapHeight);
-		g.setColor(Color.BLACK);
-		g.drawString(output, (mapWidth/2)-(output.length()*3), (mapHeight/2)-5);
-		
-	}*/
+
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Reading in Party/Map and communicating with Handler class
 	
@@ -343,10 +339,48 @@ public class GUI extends JPanel {
 		return partySelection;
 	}
 	
+	
+	public void hordeSelectUp()
+	{
+		if(hordeSelection==hordeLength-1)
+			hordeSelection = 0;
+		else
+			hordeSelection++;
+	}
+	
+	public void hordeSelectDown()
+	{
+		if(hordeSelection==0)
+			hordeSelection = hordeLength-1;
+		else
+			hordeSelection--;
+	}
+	
+	public int getHordeSelection()
+	{
+		return hordeSelection;
+	}
+	
 	public void setCursorPosition(int x, int y)
 	{
 		cursorXPos = x;
 		cursorYPos = y;
+	}
+	
+	
+	public void toggleHeroControl()
+	{
+		if(toggleHeroControl)
+		{
+			toggleHeroControl = false;
+			System.out.println("Contrl Toggled from Hero to Enemy");
+		}
+		else
+		{
+			toggleHeroControl = true;
+			System.out.println("Contrl Toggled from Enemy to Hero");
+		}
+		
 	}
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -451,8 +485,16 @@ public class GUI extends JPanel {
 			int y = event.getY() - 32;
 			
 			if (event.getButton() == MouseEvent.BUTTON1) {
-				if(x<mapWidth && y<mapHeight)
-					((Hero) party.get(getPartySelection())).setPosition(x/(mapWidth/gridWidth), y/(mapHeight/gridHeight));
+				if(toggleHeroControl)
+				{
+					if(x<mapWidth && y<mapHeight)
+						((Hero) party.get(getPartySelection())).setPosition(x/(mapWidth/gridWidth), y/(mapHeight/gridHeight));
+				}
+				else
+				{
+					if(x<mapWidth && y<mapHeight)
+						((Enemy) horde.get(getHordeSelection())).setPosition(x/(mapWidth/gridWidth), y/(mapHeight/gridHeight));
+				}
 			}
 			if (event.getButton() == MouseEvent.BUTTON3) {
 				
@@ -487,19 +529,38 @@ public class GUI extends JPanel {
 
 		public void keyPressed(KeyEvent event) {
 			// TODO Auto-generated method stub
-			
-			if (event.getKeyCode() == KeyEvent.VK_W) 
-			{
-				partySelectDown();
-
-			}
-			if (event.getKeyCode() == KeyEvent.VK_S) 
-			{
-				partySelectUp();
-
-			}
+			if(event.getKeyCode() == KeyEvent.VK_SPACE)
+				toggleHeroControl();
 				
+			if(toggleHeroControl)
+			{
+				if (event.getKeyCode() == KeyEvent.VK_W) 
+				{
+					partySelectDown();
+
+				}
+				if (event.getKeyCode() == KeyEvent.VK_S) 
+				{
+					partySelectUp();
+
+				}
 			}
+			else
+			{
+				if (event.getKeyCode() == KeyEvent.VK_W) 
+				{
+					hordeSelectDown();
+
+				}
+				if (event.getKeyCode() == KeyEvent.VK_S) 
+				{
+					hordeSelectUp();
+
+				}
+			}
+		}
+			
+		
 			
 		@Override
 		public void mouseMoved(MouseEvent event) {
