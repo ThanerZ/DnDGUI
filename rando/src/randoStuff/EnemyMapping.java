@@ -13,6 +13,8 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Scanner;
@@ -98,6 +100,7 @@ public class EnemyMapping extends JPanel {
 			drawGrid(g);
 			drawClearButton(g);
 			drawHorde(g);
+			drawSaveButton(g);
 			
 
 			
@@ -201,6 +204,12 @@ public class EnemyMapping extends JPanel {
 
 	}
 	
+	public void drawSaveButton(Graphics g)
+	{
+		g.setColor(Color.GREEN);
+		g.fillRect(mapWidth + (width-mapWidth)/8,  mapHeight - (mapHeight/8), ((mapWidth/gridWidth)*10)-1, ((mapHeight/gridHeight)*2)-1);
+	}
+	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Creation
 	
@@ -235,6 +244,26 @@ public class EnemyMapping extends JPanel {
 		}
 	}
 	
+	public void saveSetup() throws FileNotFoundException, UnsupportedEncodingException
+	{
+		PrintWriter writer = new PrintWriter("data/EnemyMap.txt", "UTF-8");
+		
+		int xSpot;
+		int ySpot;
+		
+		for(int i = 0; i<hordeLength; i++)
+		{
+			xSpot = ((Enemy) Horde.get(i)).getXPos();
+			ySpot = ((Enemy) Horde.get(i)).getYPos();
+			
+			writer.println(xSpot);
+			writer.println(ySpot);
+		}
+		
+		writer.close();
+		
+		System.out.println("SAVED");
+	}
 
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Reading in Party/Map and communicating with Handler class
@@ -364,6 +393,16 @@ public class EnemyMapping extends JPanel {
 				//if the click is on the button
 				if(x>(mapWidth + (width-mapWidth)/8) && y>(mapHeight/8) && x<(mapWidth + (width-mapWidth)/8 + (mapWidth/gridWidth)*10)-1 && y<(((mapHeight/8)+(mapHeight/gridHeight)*2)-1))
 					clearEnemies();
+				if(x>(mapWidth + (width-mapWidth)/8) && y>(mapHeight - (mapHeight/8)) && x<(mapWidth + (width-mapWidth)/8 + (mapWidth/gridWidth)*10)-1 && y<(((mapHeight - (mapHeight/8))+(mapHeight/gridHeight)*2)-1))
+				{
+					try {
+						saveSetup();
+					} catch (FileNotFoundException | UnsupportedEncodingException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+					
 			}
 			if (event.getButton() == MouseEvent.BUTTON3) {
 				

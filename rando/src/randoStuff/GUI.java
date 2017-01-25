@@ -63,6 +63,8 @@ public class GUI extends JPanel {
 	ArrayList<Hero> party = new ArrayList<Hero>();
 	int partyLength = 0;
 	int partySelection = 0;
+	ArrayList<Enemy> horde = new ArrayList<Enemy>();
+	int hordeLength = 0;
 	ArrayList<Obstacle> course = new ArrayList<Obstacle>();
 	int courseLength = 0;
 	ArrayList<String> names = new ArrayList<String>();
@@ -99,10 +101,10 @@ public class GUI extends JPanel {
 			drawGrid(g);
 			drawOrderPriority(g);
 			drawOrderBar(g);
-			drawName(g);
 			//drawMotionArrow(g);
 			drawParty(g);
 			drawPartyPriority(g);
+			drawHorde(g);
 			
 			
 			//sanity line
@@ -234,15 +236,20 @@ public class GUI extends JPanel {
 		g.fillRect(mapWidth, mapHeight/(partyLength+1)*(partySelection+1) - ((mapHeight/gridHeight)/8), width-mapWidth, (mapHeight/gridHeight)-1 + ((mapHeight/gridHeight)/4));
 	}
 	
-	public void drawName(Graphics g)
+	public void drawHorde(Graphics g)
 	{
-		for(int i=0; i<partyLength; i++)
-		{
-			JLabel label = new JLabel(party.get(i).getName());
-			label.setBounds(mapWidth + ((width-mapWidth)/4), mapHeight/(partyLength+1)*(i+1), (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
-			frame.add(label);
-
-		}
+		
+			int xSpot = 0;
+			int ySpot = 0;
+			for(int i=0; i<hordeLength; i++)
+			{
+				g.setColor(((Enemy) horde.get(i)).getColor());
+				xSpot = ((Enemy) horde.get(i)).getXPos();
+				ySpot = ((Enemy) horde.get(i)).getYPos();
+				g.fillRect(xSpot*(mapWidth/gridWidth)+1, ySpot*(mapHeight/gridHeight)+1, (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
+			}
+			
+		
 	}
 	/*public void winner(Graphics g)
 	{
@@ -274,30 +281,29 @@ public class GUI extends JPanel {
 			}
 	}
 	
-	/*public void partyCreation() throws FileNotFoundException
+	public void hordeCreation() throws FileNotFoundException
 	{
-		Scanner file = new Scanner(new File("images/Hero.txt"));
+		Scanner file = new Scanner(new File("data/EnemyMap.txt"));
 		
 	while(file.hasNext())
 		{
-			Hero player = new Hero(file.nextLine(), file.nextInt(), file.nextInt(), file.nextInt(), file.nextInt(), file.nextInt());
+			Enemy Eminem = new Enemy(file.nextInt(), file.nextInt());
 			
-			file.nextLine();
-			party.add(player);
-			partyLength++;
+			horde.add(Eminem);
+			hordeLength++;
 		}
 	}
-	*/
+	
 	public void partyCreation() throws FileNotFoundException
 	{
-		Scanner partyFile = new Scanner (new File("partyData/party.txt"));
+		Scanner partyFile = new Scanner (new File("data/party.txt"));
 		ArrayList<String> tempParty = new ArrayList<String>();
 		
 		while(partyFile.hasNext())
 		{
 			String name = partyFile.nextLine();
 			tempParty.add(name);
-			Scanner heroDataFile = new Scanner(new File("partyData/Characters/" + tempParty.get(partyLength) + ".txt"));
+			Scanner heroDataFile = new Scanner(new File("data/Characters/" + tempParty.get(partyLength) + ".txt"));
 			
 			
 				Hero player = new Hero(heroDataFile.nextLine(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt());
@@ -363,6 +369,7 @@ public class GUI extends JPanel {
 	{
 		generateGrid();
 		partyCreation();
+		hordeCreation();
 		mapCreation();
 		startupChecker = false;
 	}
