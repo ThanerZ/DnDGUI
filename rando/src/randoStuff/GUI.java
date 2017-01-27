@@ -59,20 +59,21 @@ public class GUI extends JPanel {
 	int gridWidth = 48;
 	int gridHeight = 20;
 	
-	static //number of obstacles
+	//number of obstacles
 	int obstacles = 10;
 	int[][] map = new int[gridWidth][gridHeight];
 	
 	ArrayList<Hero> party = new ArrayList<Hero>();
 	int partyLength = 0;
 	int partySelection = 0;
+	
 	ArrayList<Enemy> horde = new ArrayList<Enemy>();
 	int hordeLength = 0;
 	int hordeSelection = 0;
+	
 	ArrayList<Obstacle> course = new ArrayList<Obstacle>();
 	int courseLength = 0;
-	ArrayList<String> names = new ArrayList<String>();
-	int cursorXPos, cursorYPos;
+
 	
 	
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -103,11 +104,14 @@ public class GUI extends JPanel {
 			drawBackground(g);
 			drawMap(g);
 			drawGrid(g);
+			
 			drawPriorityBar(g);
+			
 			drawPartyBar(g);
-			//drawMotionArrow(g);
+			
 			drawParty(g);
 			drawPriority(g);
+			
 			drawHorde(g);
 			
 			//sanity line
@@ -272,7 +276,7 @@ public class GUI extends JPanel {
 	
 	public void mapCreation() throws FileNotFoundException
 	{
-		Scanner file = new Scanner(new File("images/Map.txt"));
+		Scanner file = new Scanner(new File("data/Map.txt"));
 		gridWidth = file.nextInt();
 		gridHeight = file.nextInt();
 
@@ -325,7 +329,6 @@ public class GUI extends JPanel {
 
 
 
-
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//CLICKING MACRO
 	public void partySelectUp()
@@ -335,7 +338,6 @@ public class GUI extends JPanel {
 		else
 			partySelection++;
 	}
-	
 	public void partySelectDown()
 	{
 		if(partySelection==0)
@@ -343,12 +345,10 @@ public class GUI extends JPanel {
 		else
 			partySelection--;
 	}
-	
 	public int getPartySelection()
 	{
 		return partySelection;
 	}
-	
 	
 	public void hordeSelectUp()
 	{
@@ -357,7 +357,6 @@ public class GUI extends JPanel {
 		else
 			hordeSelection++;
 	}
-	
 	public void hordeSelectDown()
 	{
 		if(hordeSelection==0)
@@ -365,16 +364,9 @@ public class GUI extends JPanel {
 		else
 			hordeSelection--;
 	}
-	
 	public int getHordeSelection()
 	{
 		return hordeSelection;
-	}
-	
-	public void setCursorPosition(int x, int y)
-	{
-		cursorXPos = x;
-		cursorYPos = y;
 	}
 	
 	
@@ -394,20 +386,7 @@ public class GUI extends JPanel {
 	}
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-
-	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-	
-	
-	public void startScreen(Graphics g)
-	{
-		g.setColor(this.randColor());
-		g.fillRect(0, 0, mapWidth, mapHeight);
-	}
-	
-	
-	//===============================================================================================================================================================
-	
+		
 	//Macro's
 	public void onStartup() throws FileNotFoundException
 	{
@@ -424,12 +403,11 @@ public class GUI extends JPanel {
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	
 	//FRAMING
-	static JTextField text = new JTextField();
-
 	static JFrame frame = new JFrame("Thane is pretty cool");
 
 	public static void frame() throws InterruptedException {
 		GUI game = new GUI();
+		
 		Font f = new Font("Engravers MT", Font.BOLD, 23);
 		
 		//CONSTRUCTION
@@ -575,9 +553,7 @@ public class GUI extends JPanel {
 		@Override
 		public void mouseMoved(MouseEvent event) {
 			// TODO Auto-generated method stub
-			int x = event.getX() - 5;
-			int y = event.getY() - 32;
-			setCursorPosition(x, y);
+
 			
 		}
 		@Override
