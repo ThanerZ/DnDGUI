@@ -92,7 +92,12 @@ public class EnemyMapping extends JPanel {
 		//startup ritual
 		if(startupChecker==true)
 		{
-			onStartup();
+			try {
+				onStartup();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		
@@ -318,7 +323,7 @@ public class EnemyMapping extends JPanel {
 	
 	public void mapCreation() throws FileNotFoundException
 	{
-		Scanner file = new Scanner(new File("images/Map.txt"));
+		Scanner file = new Scanner(new File("data/Map.txt"));
 		gridWidth = file.nextInt();
 		gridHeight = file.nextInt();
 
@@ -366,10 +371,9 @@ public class EnemyMapping extends JPanel {
 	//===============================================================================================================================================================
 	
 	//Macro's
-	public void onStartup()
+	public void onStartup() throws FileNotFoundException
 	{
-		
-		
+		mapCreation();
 	}
 	
 	public Color randColor() {

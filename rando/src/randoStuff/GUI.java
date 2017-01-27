@@ -212,8 +212,6 @@ public class GUI extends JPanel {
 				ySpot = ((Enemy) horde.get(i)).getYPos();
 				health = ((Enemy) horde.get(i)).getHealth();
 				
-				//Color is set based on the Max HP of the Enemy
-				((Enemy) horde.get(i)).setColor(255-(health*2), 0, 0);
 				
 				g.fillRect(xSpot*(mapWidth/gridWidth)+1, ySpot*(mapHeight/gridHeight)+1, (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
 			}
@@ -233,6 +231,7 @@ public class GUI extends JPanel {
 			g.fillRect(mapWidth + (width-mapWidth)/8, mapHeight/(partyLength+1)*(i+1), (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
 			g.setColor(Color.BLACK);
 			g.drawString((party.get(i).getName()), (mapWidth + (width-mapWidth)/8) + (mapWidth/gridWidth*2), mapHeight/(partyLength+1)*(i+1) + (mapHeight/gridHeight/2));
+			g.drawString("" + ((Hero) party.get(i)).getHealth(), mapWidth + (width-mapWidth)/8, (mapHeight/(partyLength+1)*(i+1)) + (mapHeight/gridHeight/2));
 			
 		}
 		
@@ -308,6 +307,9 @@ public class GUI extends JPanel {
 	while(file.hasNext())
 		{
 			Enemy Eminem = new Enemy(file.nextInt(), file.nextInt(), file.nextInt());
+			
+			//Color is set based on the Max HP of the Enemy
+			Eminem.setColor(255-(Eminem.getHealth()*2), 0, 0);
 			
 			horde.add(Eminem);
 			hordeLength++;
@@ -564,33 +566,24 @@ public class GUI extends JPanel {
 			if(event.getKeyCode() == KeyEvent.VK_SPACE)
 				toggleHeroControl();
 				
-			if(toggleHeroControl)
+			if(event.getKeyCode() == KeyEvent.VK_A)
 			{
-				if (event.getKeyCode() == KeyEvent.VK_W) 
-				{
+				if (toggleHeroControl) 
 					partySelectDown();
-
-				}
-				if (event.getKeyCode() == KeyEvent.VK_S) 
-				{
-					partySelectUp();
-
-				}
-			}
-			else
-			{
-				if (event.getKeyCode() == KeyEvent.VK_W) 
-				{
+				else
 					hordeSelectDown();
-
-				}
-				if (event.getKeyCode() == KeyEvent.VK_S) 
-				{
-					hordeSelectUp();
-
-				}
 			}
+			if(event.getKeyCode() == KeyEvent.VK_D)
+			{
+				if (toggleHeroControl) 
+					partySelectUp();
+				else
+					hordeSelectUp();
+			}
+		
 		}
+	
+		
 			
 		
 			
