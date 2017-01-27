@@ -204,11 +204,17 @@ public class GUI extends JPanel {
 		
 			int xSpot = 0;
 			int ySpot = 0;
+			int health = 0;
 			for(int i=0; i<hordeLength; i++)
 			{
 				g.setColor(((Enemy) horde.get(i)).getColor());
 				xSpot = ((Enemy) horde.get(i)).getXPos();
 				ySpot = ((Enemy) horde.get(i)).getYPos();
+				health = ((Enemy) horde.get(i)).getHealth();
+				
+				//Color is set based on the Max HP of the Enemy
+				((Enemy) horde.get(i)).setColor(255-(health*2), 0, 0);
+				
 				g.fillRect(xSpot*(mapWidth/gridWidth)+1, ySpot*(mapHeight/gridHeight)+1, (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
 			}
 			
@@ -265,8 +271,12 @@ public class GUI extends JPanel {
 	}
 	public void drawPriorityBar(Graphics g)
 	{
-		g.setColor(Color.YELLOW);
-		g.fillRect(mapWidth, mapHeight/(partyLength+1)*(partySelection+1) - ((mapHeight/gridHeight)/8), width-mapWidth, (mapHeight/gridHeight)-1 + ((mapHeight/gridHeight)/4));
+		if(toggleHeroControl)
+			g.setColor(Color.YELLOW);
+		else
+			g.setColor(new Color(255, 255, 130));
+			g.fillRect(mapWidth, mapHeight/(partyLength+1)*(partySelection+1) - ((mapHeight/gridHeight)/8), width-mapWidth, (mapHeight/gridHeight)-1 + ((mapHeight/gridHeight)/4));
+		
 	}
 	
 	
@@ -297,7 +307,7 @@ public class GUI extends JPanel {
 		
 	while(file.hasNext())
 		{
-			Enemy Eminem = new Enemy(file.nextInt(), file.nextInt());
+			Enemy Eminem = new Enemy(file.nextInt(), file.nextInt(), file.nextInt());
 			
 			horde.add(Eminem);
 			hordeLength++;
@@ -369,7 +379,6 @@ public class GUI extends JPanel {
 		return hordeSelection;
 	}
 	
-	
 	public void toggleHeroControl()
 	{
 		if(toggleHeroControl)
@@ -384,6 +393,25 @@ public class GUI extends JPanel {
 		}
 		
 	}
+	
+	
+	public boolean checkMapOccupation(int x, int y)
+	{
+		//returns false for a grid-space being occupied
+		//occupied = false
+			for(int i = 0; i<partyLength; i++)
+			{
+				if(x == ((Hero) party.get(i)).getXPos()  &&  y == ((Hero) party.get(i)).getYPos())
+					return false;
+			}
+			for(int i = 0; i<hordeLength; i++)
+			{
+				if(x == ((Enemy) horde.get(i)).getXPos()  &&  y == ((Enemy) horde.get(i)).getYPos())
+					return false;
+			}
+			return true;
+		
+	}
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 		
@@ -395,6 +423,15 @@ public class GUI extends JPanel {
 		hordeCreation();
 		mapCreation();
 		startupChecker = false;
+	}
+	
+	public int convertXToGrid(int x)
+	{
+		return x/(mapWidth/gridWidth);
+	}
+	public int convertYToGrid(int y)
+	{
+		return y/(mapHeight/gridHeight);
 	}
 	
 	public Color randColor() {
@@ -476,12 +513,19 @@ public class GUI extends JPanel {
 				if(toggleHeroControl)
 				{
 					if(x<mapWidth && y<mapHeight)
-						((Hero) party.get(getPartySelection())).setPosition(x/(mapWidth/gridWidth), y/(mapHeight/gridHeight));
+					{
+						if(checkMapOccupation(convertXToGrid(x), convertYToGrid(y)))
+							((Hero) party.get(getPartySelection())).setPosition(convertXToGrid(x), convertYToGrid(y));
+					}
+						
 				}
 				else
 				{
 					if(x<mapWidth && y<mapHeight)
-						((Enemy) horde.get(getHordeSelection())).setPosition(x/(mapWidth/gridWidth), y/(mapHeight/gridHeight));
+					{
+						if(checkMapOccupation(convertXToGrid(x), convertYToGrid(y)))
+							((Enemy) horde.get(getHordeSelection())).setPosition(convertXToGrid(x), convertYToGrid(y));
+					}
 				}
 			}
 			if (event.getButton() == MouseEvent.BUTTON3) {

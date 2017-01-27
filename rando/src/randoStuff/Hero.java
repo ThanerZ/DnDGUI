@@ -9,28 +9,8 @@ public class Hero {
 	int health;
 	int red, green, blue;
 	String name;
-	
-	public Hero()
-	{
-		xPos = 0;
-		yPos = 0;
-		name = "Player";
-	}
-	
-	public Hero(int x, int y)
-	{
-		xPos = x;
-		yPos = y;
 
-	}
 	
-	public Hero(String n, int x, int y)
-	{
-		xPos = x;
-		yPos = y;
-		name = n;
-	}
-	//ULTIMATE ONE
 	public Hero(String n, int x, int y, int r, int g, int b)
 	{
 		xPos = x;
@@ -41,6 +21,18 @@ public class Hero {
 		green = g;
 		blue = b;
 	}
+	public Hero(String n, int x, int y, int r, int g, int b, int h)
+	{
+		xPos = x;
+		yPos = y;
+		name = n;
+		
+		red = r;
+		green = g;
+		blue = b;
+		
+		health = h;
+	}
 	
 	public void setPosition(int x, int y)
 	{
@@ -48,6 +40,10 @@ public class Hero {
 		yPos = y;
 	}
 	
+	public void setHealth(int h)
+	{
+		health = h;
+	}
 	
 	public int getXPos()
 	{
@@ -57,6 +53,11 @@ public class Hero {
 	public int getYPos()
 	{
 		return yPos;
+	}
+	
+	public int getHealth()
+	{
+		return health;
 	}
 	
 	public Color getColor()

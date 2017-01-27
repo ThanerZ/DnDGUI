@@ -20,6 +20,8 @@ public class Enemy {
 		red = 255;
 		green = 0;
 		blue = 0;
+		
+		health = 0;
 	}
 	
 	public Enemy(int x, int y)
@@ -30,6 +32,20 @@ public class Enemy {
 		red = 255;
 		green = 0;
 		blue = 0;
+		
+		health = 0;
+	}
+	
+	public Enemy(int x, int y, int h)
+	{
+		xPos = x;
+		yPos = y;
+
+		red = 255;
+		green = 0;
+		blue = 0;
+		
+		health = h;
 	}
 	
 	public Enemy(String n, int x, int y)
@@ -41,9 +57,11 @@ public class Enemy {
 		red = 255;
 		green = 0;
 		blue = 0;
+		
+		health = 0;
 	}
 	//ULTIMATE ONE
-	public Enemy(String n, int x, int y, int r, int g, int b)
+	public Enemy(String n, int x, int y, int r, int g, int b, int h)
 	{
 		xPos = x;
 		yPos = y;
@@ -52,6 +70,8 @@ public class Enemy {
 		red = r;
 		green = g;
 		blue = b;
+		
+		health = h;
 	}
 	
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -60,13 +80,17 @@ public class Enemy {
 		xPos = x;
 		yPos = y;
 	}
-	
 	public void setColor(int r, int g, int b)
 	{
 		red = r;
 		green = g;
 		blue = b;
 		
+	}
+	
+	public void setHealth(int h)
+	{
+		health = h;
 	}
 //---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	
@@ -75,7 +99,6 @@ public class Enemy {
 	{
 		return xPos;
 	}
-	
 	public int getYPos()
 	{
 		return yPos;
@@ -84,6 +107,11 @@ public class Enemy {
 	public Color getColor()
 	{
 		return new Color(red, green, blue);
+	}
+	
+	public int getHealth()
+	{
+		return health;
 	}
 	
 	public String getName()

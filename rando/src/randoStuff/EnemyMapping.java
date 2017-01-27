@@ -41,6 +41,9 @@ public class EnemyMapping extends JPanel {
 	//Clicking
 	boolean clearEnemiesSafety = true;
 	
+	//Editing
+	int editingSelection = -1;
+	
 	//Startup
 	boolean startupChecker = true;
 	
@@ -67,7 +70,7 @@ public class EnemyMapping extends JPanel {
 	int obstacles = 10;
 	int[][] map = new int[gridWidth][gridHeight];
 	
-	ArrayList<Enemy> Horde = new ArrayList<Enemy>();
+	ArrayList<Enemy> horde = new ArrayList<Enemy>();
 	int hordeLength = 0;
 	ArrayList<Obstacle> course = new ArrayList<Obstacle>();
 	int courseLength = 0;
@@ -92,7 +95,6 @@ public class EnemyMapping extends JPanel {
 			onStartup();
 		}
 		
-		//fuckingCool(g);
 		
 			//Drawing the stuff
 			drawBackground(g);
@@ -101,6 +103,7 @@ public class EnemyMapping extends JPanel {
 			drawClearButton(g);
 			drawHorde(g);
 			drawSaveButton(g);
+			drawPriority(g);
 			
 
 			
@@ -119,13 +122,6 @@ public class EnemyMapping extends JPanel {
 	
 	//---------------------------------------------------------------------------------------------------------------------------------------------------------------
 	//Drawing
-	public void fuckingCool(Graphics g)
-	{
-		for(int i=0; i<gridWidth; i++)
-		{
-			g.drawLine(i*(mapWidth/gridWidth), 0, mapHeight, i*(mapWidth/gridWidth));
-		}
-	}
 	public void generateGrid()
 	{
 		for(int i=0; i<gridWidth; i++)
@@ -184,16 +180,36 @@ public class EnemyMapping extends JPanel {
 		{
 			int xSpot = 0;
 			int ySpot = 0;
+			int health = 0;
 			for(int i=0; i<hordeLength; i++)
 			{
-				g.setColor(((Enemy) Horde.get(i)).getColor());
-				xSpot = ((Enemy) Horde.get(i)).getXPos();
-				ySpot = ((Enemy) Horde.get(i)).getYPos();
-				g.fillRect(xSpot*(mapWidth/gridWidth)+1, ySpot*(mapHeight/gridHeight)+1, (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
+				xSpot = ((Enemy) horde.get(i)).getXPos();
+				ySpot = ((Enemy) horde.get(i)).getYPos();
+				health = horde.get(i).getHealth();
 				
+				g.setColor(((Enemy) horde.get(i)).getColor());
+				
+				g.fillRect(xSpot*(mapWidth/gridWidth)+1, ySpot*(mapHeight/gridHeight)+1, (mapWidth/gridWidth)-1, (mapHeight/gridHeight)-1);
+				g.setColor(Color.BLACK);
+				g.drawString("" + health, (xSpot-1)*(mapWidth/gridWidth)+(mapWidth/gridWidth), ySpot*(mapHeight/gridHeight)+(mapHeight/gridHeight/2));
 				
 				
 			}
+		}
+	}
+	
+	public void drawPriority(Graphics g)
+	{
+		if(hordeLength>0)
+		{
+		int xSpot;
+		int ySpot;
+		
+		g.setColor(Color.YELLOW);
+		
+		xSpot = ((Enemy) horde.get(editingSelection)).getXPos();
+		ySpot = ((Enemy) horde.get(editingSelection)).getYPos();
+		g.drawRect(xSpot*(mapWidth/gridWidth), ySpot*(mapHeight/gridHeight), (mapWidth/gridWidth), (mapHeight/gridHeight));
 		}
 	}
 	
@@ -223,18 +239,39 @@ public class EnemyMapping extends JPanel {
 		Enemy Eminem = new Enemy();
 		Eminem.setPosition(x, y);
 		Eminem.setColor(255,0,0);
-		Horde.add(Eminem);
+		horde.add(Eminem);
 		hordeLength++;
+		editingSelection = hordeLength-1;
 		}
-		
 	}
-
-	public void deletePreviousEnemy()
+	
+	public void setEnemyHealthUp()
 	{
 		if(hordeLength>0)
 		{
-			Horde.remove(hordeLength-1);
-			hordeLength--;
+			int current = horde.get(editingSelection).getHealth();
+		
+			horde.get(editingSelection).setHealth(current+1);
+		}
+	}
+	public void setEnemyHealthDown()
+	{
+		if(hordeLength>0)
+		{
+			int health = horde.get(editingSelection).getHealth();
+			
+			if(health>0)
+				horde.get(editingSelection).setHealth(health-1);
+		}
+	}
+	public void deleteEnemy()
+	{
+		if(hordeLength>0)
+		{
+		horde.remove(editingSelection);
+		if(editingSelection>0)
+			editingSelection--;
+		hordeLength--;
 		}
 	}
 	
@@ -244,9 +281,10 @@ public class EnemyMapping extends JPanel {
 			clearEnemiesSafety = false;
 		else
 		{
-			Horde.clear();
+			horde.clear();
 			clearEnemiesSafety = true;
 			hordeLength = 0;
+			editingSelection = -1;
 		}
 	}
 	
@@ -256,14 +294,17 @@ public class EnemyMapping extends JPanel {
 		
 		int xSpot;
 		int ySpot;
+		int health;
 		
 		for(int i = 0; i<hordeLength; i++)
 		{
-			xSpot = ((Enemy) Horde.get(i)).getXPos();
-			ySpot = ((Enemy) Horde.get(i)).getYPos();
+			xSpot = ((Enemy) horde.get(i)).getXPos();
+			ySpot = ((Enemy) horde.get(i)).getYPos();
+			health = ((Enemy) horde.get(i)).getHealth();
 			
 			writer.println(xSpot);
 			writer.println(ySpot);
+			writer.println(health);
 		}
 		
 		writer.close();
@@ -299,7 +340,7 @@ public class EnemyMapping extends JPanel {
 		
 		for(int i = 0; i<hordeLength; i++)
 		{
-			if(x == ((Enemy) Horde.get(i)).getXPos()  &&  y == ((Enemy) Horde.get(i)).getYPos())
+			if(x == ((Enemy) horde.get(i)).getXPos()  &&  y == ((Enemy) horde.get(i)).getYPos())
 				return false;
 		}
 		return true;
@@ -308,12 +349,15 @@ public class EnemyMapping extends JPanel {
 
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 	//CLICKING MACRO
-
-	
-	public void setCursorPosition(int x, int y)
+	public void selectPreviousEnemy()
 	{
-		cursorXPos = x;
-		cursorYPos = y;
+		if(editingSelection>0)
+			editingSelection--;
+	}
+	public void selectNextEnemy()
+	{
+		if(editingSelection<hordeLength-1)
+			editingSelection++;
 	}
 	//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
@@ -458,17 +502,27 @@ public class EnemyMapping extends JPanel {
 			// TODO Auto-generated method stub
 			
 			if (event.getKeyCode() == KeyEvent.VK_BACK_SPACE)
-				deletePreviousEnemy();
-				
+				deleteEnemy();
+			if (event.getKeyCode() == KeyEvent.VK_W)
+				setEnemyHealthUp();
+			if (event.getKeyCode() == KeyEvent.VK_S)
+				setEnemyHealthDown();
+			if (event.getKeyCode() == KeyEvent.VK_A)
+				selectPreviousEnemy();
+			if (event.getKeyCode() == KeyEvent.VK_D)
+				selectNextEnemy();
+			if (event.getKeyCode() == KeyEvent.VK_ENTER)
+			{
+				for(int i = 0; i<hordeLength; i++)
+					System.out.println(horde.get(i));
+				System.out.println("------------------");
+			}
 				
 			}
 			
 		@Override
 		public void mouseMoved(MouseEvent event) {
 			// TODO Auto-generated method stub
-			int x = event.getX() - 5;
-			int y = event.getY() - 32;
-			setCursorPosition(x, y);
 			
 		}
 		@Override
