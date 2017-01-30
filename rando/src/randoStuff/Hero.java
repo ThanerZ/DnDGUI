@@ -21,17 +21,17 @@ public class Hero {
 		green = g;
 		blue = b;
 	}
-	public Hero(String n, int x, int y, int r, int g, int b, int h)
+	public Hero(String n, int x, int y, int h, int r, int g, int b)
 	{
 		xPos = x;
 		yPos = y;
 		name = n;
 		
+		health = h;
+		
 		red = r;
 		green = g;
 		blue = b;
-		
-		health = h;
 	}
 	
 	public void setPosition(int x, int y)

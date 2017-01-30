@@ -1,6 +1,7 @@
 Name
 X-Position
 Y-Position
+Health
 Color (Red amount)
 Color (Green amount)
 Color (Blue amount)

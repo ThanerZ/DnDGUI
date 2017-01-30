@@ -328,7 +328,7 @@ public class GUI extends JPanel {
 			Scanner heroDataFile = new Scanner(new File("data/Characters/" + tempParty.get(partyLength) + ".txt"));
 			
 			
-				Hero player = new Hero(heroDataFile.nextLine(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt());
+				Hero player = new Hero(heroDataFile.nextLine(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt(), heroDataFile.nextInt());
 				
 				heroDataFile.nextLine();
 				party.add(player);
