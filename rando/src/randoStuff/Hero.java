@@ -8,6 +8,7 @@ public class Hero {
 	int xPos, yPos;
 	int health;
 	int red, green, blue;
+	int initiative;
 	String name;
 
 	
@@ -33,6 +34,20 @@ public class Hero {
 		green = g;
 		blue = b;
 	}
+	public Hero(String n, int x, int y, int h, int r, int g, int b, int i)
+	{
+		xPos = x;
+		yPos = y;
+		name = n;
+		
+		health = h;
+		
+		initiative = i;
+		
+		red = r;
+		green = g;
+		blue = b;
+	}
 	
 	public void setPosition(int x, int y)
 	{
@@ -43,6 +58,11 @@ public class Hero {
 	public void setHealth(int h)
 	{
 		health = h;
+	}
+	
+	public void setInitiative(int i)
+	{
+		initiative = i;
 	}
 	
 	public int getXPos()
@@ -58,6 +78,11 @@ public class Hero {
 	public int getHealth()
 	{
 		return health;
+	}
+	
+	public int getInitiative()
+	{
+		return initiative;
 	}
 	
 	public Color getColor()
